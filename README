@@ -1,0 +1,9 @@
+An R6RS library for Uniform Resource Identifier (URI)
+
+== License
+
+New BSD License
+
+== RFC
+
+http://www.ietf.org/rfc/rfc3986.txt
