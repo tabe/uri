@@ -131,7 +131,7 @@
                 (else
                  (put-char oport #\%)
                  (if (< b 16) (put-char oport #\0))
-                 (put-string oport (number->string b 16))
+                 (put-string oport (string-upcase (number->string b 16)))
                  (lp (+ n 3) (get-u8 iport)))))))
 
   (define (encode-string str)
