@@ -35,6 +35,9 @@
 (assert-codec "/path/example" "%2fpath%2fexample")
 (assert-codec "省メモリプログラミング" "%e7%9c%81%e3%83%a1%e3%83%a2%e3%83%aa%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%9f%e3%83%b3%e3%82%b0")
 (assert-codec "あいうえお" "%E3%81%82%E3%81%84%E3%81%86%E3%81%88%E3%81%8A")
+(assert-codec "foo+bar" "foo%2Bbar")
+
+(assert-string=? "foo bar" (decode-string "foo+bar" 'application/x-www-form-urlencoded))
 
 (assert-string<->uri "http://example.com" ("http" "example.com" "" #f #f))
 (assert-string<->uri "http://example.com/" ("http" "example.com" "/" #f #f))

@@ -83,7 +83,7 @@
     (position invalid-percent-encoding-position)
     (sequence invalid-percent-encoding-sequence))
 
-  (define (decode iport oport)
+  (define (decode iport oport . rest)
     (assert (textual-port? iport))
     (assert (binary-port? oport))
     (let lp ((n 0)
@@ -102,18 +102,24 @@
                         (lp (+ n 1) (get-char iport))))
                      (else
                       (raise (make-invalid-percent-encoding n (cons c (string->list x))))))))
+            ((char=? c #\+)
+             (put-u8 oport
+                     (if (member 'application/x-www-form-urlencoded rest)
+                         #x20 ; #\space
+                         #x2b))
+             (lp (+ n 1) (get-char iport)))
             (else
              (put-u8 oport (char->integer c))
              (lp (+ n 1) (get-char iport))))))
 
-  (define (decode-string str)
+  (define (decode-string str . rest)
     (assert (string? str))
     (call-with-port (open-string-input-port str)
       (lambda (iport)
         (utf8->string
          (call-with-bytevector-output-port
           (lambda (oport)
-            (decode iport oport)))))))
+            (apply decode iport oport rest)))))))
 
   (define (encode iport oport)
     (assert (binary-port? iport))
